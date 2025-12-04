@@ -12,15 +12,25 @@ import categoryRoutes from '../routes/categoryRoutes.js';
 // Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
-connectDB();
-
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Database connection middleware
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    res.status(500).json({ 
+      message: 'Database connection failed', 
+      error: error.message 
+    });
+  }
+});
 
 // Routes
 app.use('/api/products', productRoutes);

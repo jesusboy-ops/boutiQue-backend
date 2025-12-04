@@ -14,8 +14,18 @@ dotenv.config();
 
 const app = express();
 
+// CORS Configuration for Vercel
+app.use(cors({
+  origin: '*', // Allow all origins (or specify your frontend URL)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+// Handle preflight requests
+app.options('*', cors());
+
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
